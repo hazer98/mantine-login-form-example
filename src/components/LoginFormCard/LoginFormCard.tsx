@@ -3,27 +3,28 @@ import {useForm} from "@mantine/hooks";
 import {useState} from "react";
 
 interface FormProps {
-    fullName: string;
-    email: string;
-    password: string;
-    gender: 'male' | 'female' | 'other';
-    termsOfService: boolean;
+    fullName?: string;
+    email?: string;
+    password?: string;
+    gender?: 'male' | 'female' | 'other';
+    termsOfService?: boolean;
 }
 
-export default function LoginFormCard() {
+LoginFormCard.defaultProps = {
+    fullName: '',
+    email: '',
+    password: '',
+    gender: 'male',
+    termsOfService: false,
+}
+
+export default function LoginFormCard(props: FormProps) {
     const [passwordRepeat, setPasswordRepeat] = useState<string>('');
 
     const form = useForm<FormProps>({
-        initialValues: {
-            fullName: '',
-            email: '',
-            password: '',
-            gender: 'male',
-            termsOfService: false,
-        },
-
+        initialValues: props,
         validationRules: {
-            email: (value) => /^\S+@\S+$/.test(value),
+            email: (value) => /^\S+@\S+$/.test(value!),
         },
     });
 
