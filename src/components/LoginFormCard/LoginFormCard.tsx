@@ -1,9 +1,36 @@
 import {Button, Card, Checkbox, Select, Space, Text, TextInput} from "@mantine/core";
+import {useForm} from "@mantine/hooks";
+import {useState} from "react";
+
+interface FormProps {
+    fullName: string;
+    email: string;
+    password: string;
+    gender: 'male' | 'female' | 'other';
+    termsOfService: boolean;
+}
 
 export default function LoginFormCard() {
+    const [passwordRepeat, setPasswordRepeat] = useState<string>('');
+
+    const form = useForm<FormProps>({
+        initialValues: {
+            fullName: '',
+            email: '',
+            password: '',
+            gender: 'male',
+            termsOfService: false,
+        },
+
+        validationRules: {
+            email: (value) => /^\S+@\S+$/.test(value),
+        },
+    });
+
     return (
-        <div
+        <form
             style={{width: 450}}
+            onSubmit={form.onSubmit((values: FormProps) => console.log(values))}
         >
             <Card
                 padding={'xl'}
@@ -22,6 +49,7 @@ export default function LoginFormCard() {
                     label={'Full name'}
                     placeholder={'Your name'}
                     required
+                    {...form.getInputProps('fullName')}
                 />
                 <Space h={'xs'}/>
                 <TextInput
@@ -29,6 +57,7 @@ export default function LoginFormCard() {
                     placeholder={'Your email'}
                     type={'email'}
                     required
+                    {...form.getInputProps('email')}
                 />
                 <Space h={'xs'}/>
                 <TextInput
@@ -36,12 +65,16 @@ export default function LoginFormCard() {
                     placeholder={'Your password'}
                     type={'password'}
                     required
+                    {...form.getInputProps('password')}
                 />
                 <Space h={'xs'}/>
                 <TextInput
+                    value={passwordRepeat}
+                    onChange={(event) => setPasswordRepeat(event.currentTarget.value)}
                     label={'Repeat password'}
                     placeholder={'Repeat your password'}
                     type={'password'}
+                    error={!(form.getInputProps('password').value === passwordRepeat)}
                     required
                 />
                 <Space h={'xs'}/>
@@ -49,18 +82,20 @@ export default function LoginFormCard() {
                     style={{width: 100}}
                     label={'Gender'}
                     required
-                    defaultValue={'men'}
+                    defaultValue={'male'}
                     data={[
-                        {value: 'men', label: 'Men'},
+                        {value: 'male', label: 'Male'},
                         {value: 'female', label: 'Female'},
                         {value: 'other', label: 'Other'}
                     ]}
+                    {...form.getInputProps('gender')}
                 />
                 <Space h={'xl'}/>
                 <Checkbox
                     label={'I agree to sell my privacy'}
                     required
                     color={'teal'}
+                    {...form.getInputProps('termsOfService', { type: 'checkbox' })}
                 />
                 <Space h={'xl'}/>
                 <Button
@@ -68,6 +103,7 @@ export default function LoginFormCard() {
                     gradient={{from: 'teal', to: 'lime'}}
                     fullWidth
                     uppercase
+                    type={'submit'}
                 >
                     Sign up
                 </Button>
@@ -86,7 +122,7 @@ export default function LoginFormCard() {
                     </a>
                 </Text>
             </Card>
-        </div>
+        </form>
     )
 
 }
