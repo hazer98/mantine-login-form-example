@@ -39,11 +39,10 @@ export default function LoginFormCard(props: FormProps) {
             >
                 <Text
                     size={'xl'}
-                    transform={'uppercase'}
                     weight={700}
                     align={'center'}
                 >
-                    create account
+                    Create an account
                 </Text>
                 <Space h={'xl'}/>
                 <TextInput
