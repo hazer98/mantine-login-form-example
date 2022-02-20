@@ -24,7 +24,7 @@ export default function LoginFormCard(props: FormProps) {
     const form = useForm<FormProps>({
         initialValues: props,
         validationRules: {
-            email: (value) => /^\S+@\S+$/.test(value!),
+            email: (value) => /^\S+@\S+$/.test(value || ''),
         },
     });
 
